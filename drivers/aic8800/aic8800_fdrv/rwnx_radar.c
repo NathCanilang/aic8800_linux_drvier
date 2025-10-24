@@ -1388,6 +1388,7 @@ static void rwnx_radar_cac_work(struct work_struct *ws)
     struct rwnx_radar *radar = container_of(dw, struct rwnx_radar, cac_work);
     struct rwnx_hw *rwnx_hw = container_of(radar, struct rwnx_hw, radar);
     struct rwnx_chanctx *ctxt;
+    const struct cfg80211_chan_def *def;
 
     if (radar->cac_vif == NULL) {
         WARN(1, "CAC finished but no vif set");
@@ -1486,6 +1487,7 @@ void rwnx_radar_start_cac(struct rwnx_radar *radar, u32 cac_time_ms,
 void rwnx_radar_cancel_cac(struct rwnx_radar *radar)
 {
     struct rwnx_hw *rwnx_hw = container_of(radar, struct rwnx_hw, radar);
+    const struct cfg80211_chan_def *def;
 
     if (radar->cac_vif == NULL) {
         return;
@@ -1494,7 +1496,7 @@ void rwnx_radar_cancel_cac(struct rwnx_radar *radar)
     if (cancel_delayed_work(&radar->cac_work)) {
         struct rwnx_chanctx *ctxt;
         ctxt = &rwnx_hw->chanctx_table[radar->cac_vif->ch_index];
-        def = &ctxt->chan_def
+        def = &ctxt->chan_def;
         rwnx_send_apm_stop_cac_req(rwnx_hw, radar->cac_vif);
         cfg80211_cac_event(radar->cac_vif->ndev,
                             def,
