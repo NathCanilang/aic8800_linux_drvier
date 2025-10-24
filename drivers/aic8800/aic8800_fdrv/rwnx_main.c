@@ -4547,14 +4547,19 @@ send_frame:
 static
 int rwnx_cfg80211_start_radar_detection(struct wiphy *wiphy,
                                         struct net_device *dev,
-										int width,
                                         struct cfg80211_chan_def *chandef
                                     #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))
                                         , u32 cac_time_ms
                                     #endif
+
+                                    #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0))
+                                        , int width
+                                    #endif
                                         )
-{
-	(void) width;
+    {
+    #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,9,0))
+        (void)width;
+    #endif
     struct rwnx_hw *rwnx_hw = wiphy_priv(wiphy);
     struct rwnx_vif *rwnx_vif = netdev_priv(dev);
     struct apm_start_cac_cfm cfm;
