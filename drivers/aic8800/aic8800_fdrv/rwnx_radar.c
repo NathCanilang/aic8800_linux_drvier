@@ -1403,6 +1403,7 @@ static void rwnx_radar_cac_work(struct work_struct *ws)
     cfg80211_cac_event(radar->cac_vif->ndev,
                 &ctxt->chan_def,
                 NL80211_RADAR_CAC_FINISHED);
+    #endif
 
     rwnx_send_apm_stop_cac_req(rwnx_hw, radar->cac_vif);
     rwnx_chanctx_unlink(radar->cac_vif);
@@ -1508,6 +1509,8 @@ void rwnx_radar_cancel_cac(struct rwnx_radar *radar)
         cfg80211_cac_event(radar->cac_vif->ndev,
                     &ctxt->chan_def,
                     NL80211_RADAR_CAC_ABORTED);
+        #endif
+
 
         rwnx_chanctx_unlink(radar->cac_vif);
     }
