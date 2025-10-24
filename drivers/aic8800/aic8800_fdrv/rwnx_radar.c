@@ -1395,8 +1395,9 @@ static void rwnx_radar_cac_work(struct work_struct *ws)
     }
 
     ctxt = &rwnx_hw->chanctx_table[radar->cac_vif->ch_index];
+    def = &ctxt->chan_def;
     cfg80211_cac_event(radar->cac_vif->ndev,
-                    &ctxt->chan_def,
+                    def,
                     NL80211_RADAR_CAC_FINISHED, GFP_KERNEL);
 
     rwnx_send_apm_stop_cac_req(rwnx_hw, radar->cac_vif);
@@ -1493,9 +1494,10 @@ void rwnx_radar_cancel_cac(struct rwnx_radar *radar)
     if (cancel_delayed_work(&radar->cac_work)) {
         struct rwnx_chanctx *ctxt;
         ctxt = &rwnx_hw->chanctx_table[radar->cac_vif->ch_index];
+        def = &ctxt->chan_def
         rwnx_send_apm_stop_cac_req(rwnx_hw, radar->cac_vif);
         cfg80211_cac_event(radar->cac_vif->ndev,
-                            &ctxt->chan_def,
+                            def,
                             NL80211_RADAR_CAC_ABORTED, 
                             GFP_KERNEL);
 
